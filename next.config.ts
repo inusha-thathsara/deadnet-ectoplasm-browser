@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
+  serverExternalPackages: ["@browserbasehq/stagehand"],
   turbopack: {
     rules: {
       "*.css": {
