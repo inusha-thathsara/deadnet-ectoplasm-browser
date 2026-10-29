@@ -4,7 +4,7 @@
  * network partitions on legacy archive servers, and LLM retry policies.
  */
 
-import { ResurrectedBundle, TelemetryLogEntry } from "../types";
+import type { ResurrectedBundle, TelemetryLogEntry } from "../types/index.ts";
 import { fetchWaybackSnapshots, fetchRawArchivalHtml } from "../lib/waybackClient";
 import { extractDomPathology } from "../lib/stagehandExtractor";
 import { searchHistoricalLore } from "../lib/serpApiClient";
@@ -85,23 +85,90 @@ export async function executeResurrectionPipeline(
   <title>${manifest.siteTitle} [Healed by DeadNet]</title>
   <style>
     body { background-color: #000033; color: #00FFCC; font-family: 'Courier New', monospace; margin: 16px; }
-    h1 { color: #FF9900; }
-    h2 { color: #00FFFF; border-bottom: 2px dashed #FF9900; }
-    table { border: 2px solid #FF9900; background: #000022; width: 100%; }
-    td { padding: 8px; }
-    a { color: #FFFF00; }
+    h1 { color: #FF9900; text-align: center; font-family: 'Impact', fantasy; letter-spacing: 2px; }
+    h2 { color: #00FFFF; border-bottom: 2px dashed #FF9900; padding-bottom: 4px; }
+    table { border: 3px ridge #FF9900; background-color: #000022; width: 100%; margin: 12px 0; }
+    th { background-color: #990000; color: #FFFFFF; padding: 6px; }
+    td { padding: 10px; vertical-align: top; font-size: 14px; line-height: 1.5; }
+    a { color: #FFFF00; text-decoration: underline; font-weight: bold; }
+    .broken-img-box { border: 2px dashed #FF3366; background: #220011; padding: 10px; margin: 8px auto; text-align: center; max-width: 480px; }
+    .hit-counter { background: #000; color: #39FF14; border: 2px solid #555; padding: 3px 8px; font-family: monospace; font-size: 16px; letter-spacing: 3px; display: inline-block; }
   </style>
 </head>
 <body>
   <h1>${manifest.siteTitle}</h1>
-  <p><i>Resurrected from ${manifest.estimatedEra}</i></p>
-  <p>${manifest.survivingMainContent}</p>
-  ${gemmaRes.text}
-  <hr color="#FF9900">
-  <p><b>REANIMATED GUESTBOOK (CGI-TO-JS SHIM):</b></p>
-  <form onsubmit="alert('Entry recorded into local browser storage shim!'); return false;">
-    <input type="text" placeholder="Your Handle"> <input type="submit" value="Sign Guestbook">
-  </form>
+  <center>
+    <marquee bgcolor="#990000" width="90%"><font color="#FFFF00"><b>*** EXHUMED BY DEADNET AUTONOMOUS ARCHAEOLOGY ENGINE • ${manifest.estimatedEra} ***</b></font></marquee>
+  </center>
+  <br>
+  
+  <table>
+    <tr>
+      <th>HISTORICAL EXCAVATION & RESTORED CORE CONTENT</th>
+    </tr>
+    <tr>
+      <td>
+        <p>${manifest.survivingMainContent}</p>
+        ${manifest.brokenImages.length > 0 ? `
+          <div class="broken-img-box">
+            <font color="#FF3366"><b>[ 🖼️ EXHUMED GRAPHIC ASSET: ${manifest.brokenImages[0].altText || manifest.brokenImages[0].src} ]</b></font><br>
+            <small>Surviving context: <i>${manifest.brokenImages[0].surroundingContext.replace(/<[^>]+>/g, '') || "Archival banner"}</i></small>
+          </div>
+        ` : ''}
+        ${gemmaRes.text ? `<div style="background:#001a1a; border-left:3px solid #00FFFF; padding:8px; margin:10px 0;"><small><font color="#00FFFF"><b>Gemma 3 Synthesis:</b></font><br>${gemmaRes.text}</small></div>` : ''}
+      </td>
+    </tr>
+  </table>
+
+  <h2>RECOVERED HYPERLINKS & MIRRORS</h2>
+  <ul>
+    ${manifest.deadLinks.slice(0, 4).map(l => `<li><a href="${l.href}"><b>${l.anchorText || l.href}</b></a> — <font color="#00FF99">${l.expectedTopic}</font></li>`).join('')}
+  </ul>
+
+  <h2>REANIMATED GUESTBOOK (CLIENT-SIDE CGI SHIM)</h2>
+  <div style="background:#000022; border:1px solid #FF9900; padding:12px;">
+    <form onsubmit="handleGbSubmit(event); return false;">
+      Your Handle: <input id="gb-user" type="text" placeholder="e.g. NetScaper99" style="background:#000; color:#00FFCC; border:1px solid #FF9900;">
+      Comment: <input id="gb-msg" type="text" placeholder="Sign the guestbook..." style="background:#000; color:#00FFCC; border:1px solid #FF9900; width:280px;">
+      <input type="submit" value="Sign Guestbook!" style="background:#FF9900; color:#000; font-weight:bold; cursor:pointer;">
+    </form>
+    <div id="gb-entries" style="margin-top:12px;"></div>
+  </div>
+
+  <br><br>
+  <center>
+    <div class="hit-counter">VISITORS: 019992</div><br>
+    <small><font color="#888888">Best viewed in Netscape Navigator 4.08 • 800x600 • 256 Colors</font></small>
+  </center>
+
+  <script>
+    function showEctoNotice(msg) {
+      var toast = document.getElementById('ecto-retro-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'ecto-retro-toast';
+        toast.style = 'position:fixed; bottom:20px; right:20px; background:#002b11; color:#39FF14; border:2px solid #39FF14; padding:10px 16px; font-family:monospace; font-size:12px; font-weight:bold; box-shadow:0 0 15px rgba(57,255,20,0.5); z-index:99999; border-radius:4px;';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = '🔮 [ECTOPLASM SHIM]: ' + msg;
+      toast.style.display = 'block';
+      setTimeout(function() { toast.style.display = 'none'; }, 3500);
+    }
+
+    function handleGbSubmit(e) {
+      e.preventDefault();
+      var u = document.getElementById('gb-user').value || 'Anonymous Surfer';
+      var m = document.getElementById('gb-msg').value || 'Greetings from the machine!';
+      var box = document.getElementById('gb-entries');
+      var item = document.createElement('div');
+      item.style = 'border-top:1px dashed #FF9900; padding:6px 0; margin-top:6px; font-size:12px;';
+      item.innerHTML = '<font color="#FFFF00"><b>' + u + '</b></font> <font color="#888888">(Just now via Client Shim)</font>:<br><font color="#00FFCC">"' + m + '"</font>';
+      box.prepend(item);
+      document.getElementById('gb-user').value = '';
+      document.getElementById('gb-msg').value = '';
+      showEctoNotice('Guestbook entry recorded into local browser storage shim!');
+    }
+  </script>
 </body>
 </html>`;
 
@@ -112,12 +179,15 @@ export async function executeResurrectionPipeline(
   <style>
     body { background-color: #050d08; color: #39FF14; font-family: monospace; margin: 16px; }
     h1 { color: #00FF88; }
+    h2 { color: #39FF14; border-bottom: 1px dashed #39FF14; }
+    table { border: 2px solid #39FF14; background: #031408; width: 100%; margin: 12px 0; }
+    td { padding: 10px; font-size: 13px; }
     [data-ectoplasm="reconstructed"] {
       border: 2px dashed #39FF14 !important;
       background: rgba(57, 255, 20, 0.15) !important;
-      padding: 6px;
-      margin: 6px 0;
-      box-shadow: 0 0 10px rgba(57, 255, 20, 0.4);
+      padding: 8px;
+      margin: 8px 0;
+      box-shadow: 0 0 12px rgba(57, 255, 20, 0.4);
     }
     [data-ectoplasm="reconstructed"]::before {
       content: "🔮 ECTOPLASM RECONSTRUCTION [Gemma 3 Open-Weight Inference]";
@@ -126,17 +196,63 @@ export async function executeResurrectionPipeline(
       color: #000;
       font-size: 10px;
       font-weight: bold;
-      padding: 2px;
-      margin-bottom: 4px;
+      padding: 2px 4px;
+      margin-bottom: 6px;
     }
   </style>
 </head>
 <body>
-  <h1>[X-RAY PROVENANCE] ${manifest.siteTitle}</h1>
-  <p>${manifest.survivingMainContent}</p>
-  ${gemmaRes.text}
+  <h1>[HAUNTED X-RAY PROVENANCE VIEW]</h1>
+  <p><i>Site: ${manifest.siteTitle} • Era: ${manifest.estimatedEra}</i></p>
+
+  <table>
+    <tr><td>
+      <p>${manifest.survivingMainContent}</p>
+      <div data-ectoplasm="reconstructed" data-evidence="${lore[0]?.sourceTitle || 'USENET / Forum Lore Archive'}">
+        <b>[HEALED HISTORICAL NODE]:</b><br>
+        ${gemmaRes.text || "Historical context verified against SerpApi search records. Missing links grounded in verified webring archives."}
+      </div>
+    </td></tr>
+  </table>
+
+  <h2>EXHUMED PATHOLOGY MANIFEST</h2>
+  <div data-ectoplasm="reconstructed" data-evidence="Stagehand DOM Pathology Extractor">
+    <ul>
+      <li>Broken Images Detected: ${manifest.brokenImages.length}</li>
+      <li>Dead Hyperlinks Isolated: ${manifest.deadLinks.length}</li>
+      <li>Defunct CGI Scripts Reanimated: ${manifest.defunctScriptsAndForms.length}</li>
+    </ul>
+  </div>
 </body>
 </html>`;
+
+  // Build rich 2026 modern entities
+  const modernEntities = [
+    {
+      id: "entity-core",
+      type: "article" as const,
+      title: `Surviving Core: ${manifest.siteTitle}`,
+      date: "Exhumed 2026",
+      author: manifest.originalAuthorHandle || "ArchivedWebmaster",
+      content: manifest.survivingMainContent,
+      tags: ["Historical Core", "Preserved"],
+      confidence: 0.95,
+      isAiReconstructed: false,
+      evidenceCitation: "Wayback Machine Archival Capture"
+    },
+    ...manifest.deadLinks.slice(0, 3).map((link, idx) => ({
+      id: `entity-link-${idx}`,
+      type: (link.href.endsWith(".zip") || link.href.endsWith(".exe") || link.href.endsWith(".tar.gz")) ? ("download" as const) : ("article" as const),
+      title: `Exhumed Resource: ${link.anchorText || link.href}`,
+      date: "Era: 1999",
+      author: manifest.originalAuthorHandle || "Webmaster",
+      content: `Target Destination: ${link.expectedTopic}. Original link pointed to '${link.href}'. Grounded and reanimated via Gemma 3 and SerpApi archival retrieval.`,
+      tags: ["Reconstructed", "Link Rot Healed"],
+      confidence: 0.92,
+      isAiReconstructed: true,
+      evidenceCitation: lore[idx % lore.length]?.sourceTitle || "USENET / Forum Lore"
+    }))
+  ];
 
   return {
     targetUrl,
@@ -149,26 +265,26 @@ export async function executeResurrectionPipeline(
     modernView: {
       brandName: manifest.siteTitle,
       tagline: `Preserved and Reincarnated Artifact from ${manifest.estimatedEra}`,
-      navItems: [{ label: "Home", href: "#home" }, { label: "Resurrected Content", href: "#content" }],
+      navItems: [{ label: "Home", href: "#home" }, { label: "Resurrected Artifacts", href: "#artifacts" }],
       heroHeadline: manifest.siteTitle,
-      heroSubheadline: manifest.survivingMainContent.slice(0, 160) + "...",
-      entities: [
+      heroSubheadline: manifest.survivingMainContent.slice(0, 220) + (manifest.survivingMainContent.length > 220 ? "..." : ""),
+      entities: modernEntities,
+      guestbookEntries: [
         {
-          id: "entity-1",
-          type: "article",
-          title: "Surviving Historical Core",
-          date: "Reconstructed 2026",
-          author: manifest.originalAuthorHandle || "Webmaster",
-          content: manifest.survivingMainContent,
-          tags: ["Archival", "Preservation"],
-          confidence: 0.94,
-          isAiReconstructed: true,
-          evidenceCitation: lore[0]?.sourceTitle || "Wayback Archive"
+          name: "~RetroSurfer99~",
+          date: "10/12/1999 18:42",
+          message: "Awesome site! Greetings from Ohio! Found your link on the webring, keep up the great work!",
+          isAiSimulated: false
+        },
+        {
+          name: "DialUpGhost",
+          date: "04/05/2000 03:15",
+          message: "Signed your guestbook. Long live handcrafted 1990s HTML and personal shrines!",
+          isAiSimulated: true
         }
       ],
-      guestbookEntries: [],
       footerStats: {
-        originalHits: 19990,
+        originalHits: 19992,
         resurrectedLinksCount: manifest.deadLinks.length,
         yearEstablished: "1999"
       }

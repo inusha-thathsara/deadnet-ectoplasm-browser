@@ -1,8 +1,8 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { GOLDEN_PRESETS } from "@/presets";
 import { executeResurrectionPipeline } from "@/temporal/workflows";
 import { ResurrectedBundle, TelemetryLogEntry } from "@/types";
-
+import { validateTargetUrl } from "@/lib/security";
 
 export async function POST(req: NextRequest) {
   try {
@@ -41,8 +41,15 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Live arbitrary URL exhumation via pipeline
-    const targetUrl = url || "http://www.geocities.com/Tokyo/Flats/9999/dreamcast_underground.html";
+    // Security Validation & SSRF Prevention
+    let targetUrl = "http://www.geocities.com/Tokyo/Flats/9999/dreamcast_underground.html";
+    if (url) {
+      const validation = validateTargetUrl(url);
+      if (!validation.isValid) {
+        return NextResponse.json({ error: validation.error || "Invalid target URL" }, { status: 400 });
+      }
+      targetUrl = validation.sanitizedUrl!;
+    }
 
     const stream = new ReadableStream({
       async start(controller) {

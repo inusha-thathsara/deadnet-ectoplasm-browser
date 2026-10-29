@@ -33,7 +33,7 @@ export function Header({
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
         {/* Logo and Challenge Badge */}
         <div className="flex items-center gap-3">
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 shadow-[0_0_15px_rgba(57,255,20,0.3)]">
+          <div className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 shadow-[0_0_15px_rgba(57,255,20,0.3)] animate-float-slow">
             <Ghost className="w-6 h-6 animate-pulse" />
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
           </div>
@@ -42,11 +42,11 @@ export function Header({
               <span className="font-mono font-black tracking-wider text-lg text-emerald-400">
                 DEADNET
               </span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-purple-950/80 border border-purple-500/40 text-purple-300 font-mono">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-purple-950/80 border border-purple-500/40 text-purple-300 font-mono shadow-sm">
                 ECTOPLASM BROWSER
               </span>
-              <span className="hidden sm:inline-block text-[11px] px-2 py-0.5 rounded bg-orange-950/70 border border-orange-500/40 text-orange-300 font-mono">
-                🎃 Hacktoberfest Week 4
+              <span className="hidden sm:inline-block text-[11px] px-2 py-0.5 rounded bg-emerald-950/70 border border-emerald-500/40 text-emerald-300 font-mono">
+                v0.1.0 Open-Source
               </span>
             </div>
             <p className="text-[11px] text-slate-400">
@@ -85,9 +85,9 @@ export function Header({
                   onSelectPreset(preset.id);
                 }}
                 disabled={isLoading}
-                className={`px-2.5 py-1 text-xs rounded-md font-mono transition-all border whitespace-nowrap flex items-center gap-1.5 ${
+                className={`px-2.5 py-1 text-xs rounded-md font-mono transition-all border whitespace-nowrap flex items-center gap-1.5 hover:scale-[1.03] active:scale-[0.98] ${
                   isSelected
-                    ? "bg-emerald-950/80 border-emerald-500 text-emerald-300 shadow-[0_0_10px_rgba(57,255,20,0.3)]"
+                    ? "bg-emerald-950/90 border-emerald-400 text-emerald-300 shadow-[0_0_12px_rgba(57,255,20,0.4)] ring-1 ring-emerald-500/50"
                     : "bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
                 }`}
               >

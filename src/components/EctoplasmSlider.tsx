@@ -66,9 +66,9 @@ export function EctoplasmSlider({
           <div className="flex items-center gap-1 font-mono text-[11px]">
             <button
               onClick={() => onChange(0)}
-              className={`px-2 py-0.5 rounded border transition-colors ${
+              className={`px-2.5 py-0.5 rounded border transition-all duration-200 hover:scale-105 active:scale-95 ${
                 sliderValue === 0
-                  ? "bg-amber-950 border-amber-500 text-amber-300 font-bold"
+                  ? "bg-amber-950 border-amber-500 text-amber-300 font-bold shadow-[0_0_10px_rgba(245,158,11,0.3)] ring-1 ring-amber-500/40"
                   : "bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200"
               }`}
             >
@@ -76,9 +76,9 @@ export function EctoplasmSlider({
             </button>
             <button
               onClick={() => onChange(50)}
-              className={`px-2 py-0.5 rounded border transition-colors ${
+              className={`px-2.5 py-0.5 rounded border transition-all duration-200 hover:scale-105 active:scale-95 ${
                 sliderValue === 50
-                  ? "bg-emerald-950 border-emerald-500 text-emerald-300 font-bold shadow-[0_0_8px_rgba(57,255,20,0.3)]"
+                  ? "bg-emerald-950 border-emerald-500 text-emerald-300 font-bold shadow-[0_0_12px_rgba(57,255,20,0.4)] ring-1 ring-emerald-500/50"
                   : "bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200"
               }`}
             >
@@ -86,9 +86,9 @@ export function EctoplasmSlider({
             </button>
             <button
               onClick={() => onChange(100)}
-              className={`px-2 py-0.5 rounded border transition-colors ${
+              className={`px-2.5 py-0.5 rounded border transition-all duration-200 hover:scale-105 active:scale-95 ${
                 sliderValue === 100
-                  ? "bg-cyan-950 border-cyan-500 text-cyan-300 font-bold"
+                  ? "bg-cyan-950 border-cyan-500 text-cyan-300 font-bold shadow-[0_0_10px_rgba(6,182,212,0.3)] ring-1 ring-cyan-500/40"
                   : "bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200"
               }`}
             >

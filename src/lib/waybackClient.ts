@@ -13,9 +13,36 @@ export interface WaybackSnapshot {
   rawSnapshotUrl: string;
 }
 
-export async function fetchWaybackSnapshots(targetUrl: string, limit: number = 5): Promise<WaybackSnapshot[]> {
+export function parseWaybackInputUrl(inputUrl: string): { originalUrl: string; explicitTimestamp?: string } {
+  const trimmed = inputUrl.trim();
+  const match = trimmed.match(/^https?:\/\/web\.archive\.org\/web\/(\d+)(?:id_)?\/(.+)$/i);
+  if (match) {
+    return {
+      explicitTimestamp: match[1],
+      originalUrl: match[2]
+    };
+  }
+  return { originalUrl: trimmed };
+}
+
+export async function fetchWaybackSnapshots(inputUrl: string, limit: number = 5): Promise<WaybackSnapshot[]> {
+  const { originalUrl, explicitTimestamp } = parseWaybackInputUrl(inputUrl);
+
+  if (explicitTimestamp) {
+    return [
+      {
+        url: originalUrl,
+        timestamp: explicitTimestamp,
+        originalUrl,
+        mimetype: "text/html",
+        statusCode: "200",
+        rawSnapshotUrl: `https://web.archive.org/web/${explicitTimestamp}id_/${originalUrl}`
+      }
+    ];
+  }
+
   try {
-    const cdxApiUrl = `https://web.archive.org/cdx/search/cdx?url=${encodeURIComponent(targetUrl)}&output=json&limit=${limit}&filter=statuscode:200`;
+    const cdxApiUrl = `https://web.archive.org/cdx/search/cdx?url=${encodeURIComponent(originalUrl)}&output=json&limit=${limit}&filter=statuscode:200`;
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 6000);
 
@@ -50,12 +77,12 @@ export async function fetchWaybackSnapshots(targetUrl: string, limit: number = 5
   const fallbackTimestamp = "19990909120000";
   return [
     {
-      url: targetUrl,
+      url: originalUrl,
       timestamp: fallbackTimestamp,
-      originalUrl: targetUrl,
+      originalUrl,
       mimetype: "text/html",
       statusCode: "200",
-      rawSnapshotUrl: `https://web.archive.org/web/${fallbackTimestamp}id_/${targetUrl}`
+      rawSnapshotUrl: `https://web.archive.org/web/${fallbackTimestamp}id_/${originalUrl}`
     }
   ];
 }

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import { Terminal, Shield, AlertTriangle, CheckCircle, Flame, ExternalLink, Activity } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { Terminal, Shield, AlertTriangle, CheckCircle, Flame, ExternalLink, Activity, Orbit, ChevronDown, ChevronUp, Radio } from "lucide-react";
 import { ResurrectedBundle, TelemetryLogEntry } from "@/types";
+import { Spectral3DCanvas } from "./Spectral3DCanvas";
 
 interface ArchaeologyTerminalProps {
   bundle: ResurrectedBundle | null;
@@ -12,62 +13,86 @@ interface ArchaeologyTerminalProps {
 
 export function ArchaeologyTerminal({ bundle, logs, isLoading }: ArchaeologyTerminalProps) {
   const [showProvenanceDrawer, setShowProvenanceDrawer] = useState(false);
+  const [show3dCanvas, setShow3dCanvas] = useState(true);
+  const logContainerRef = useRef<HTMLDivElement | null>(null);
+
+  // Auto-scroll logs as new entries stream in
+  useEffect(() => {
+    if (logContainerRef.current) {
+      logContainerRef.current.scrollTo({
+        top: logContainerRef.current.scrollHeight,
+        behavior: "smooth"
+      });
+    }
+  }, [logs]);
 
   return (
     <div className="flex flex-col h-full bg-slate-950 border-r border-slate-800 font-mono text-xs select-text">
-      {/* Terminal Title Bar */}
+      {/* Terminal Title Bar with Live Indicators */}
       <div className="bg-slate-900 border-b border-slate-800 px-3 py-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Terminal className="w-4 h-4 text-emerald-400" />
           <span className="font-bold text-slate-200">PARANORMAL DOM INSPECTOR</span>
           {isLoading && (
-            <span className="px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-500/40 text-emerald-400 text-[10px] animate-pulse">
+            <span className="px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-500/40 text-emerald-400 text-[10px] animate-pulse flex items-center gap-1 shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
               LIVE EXHUMATION
             </span>
           )}
         </div>
 
         <div className="flex items-center gap-2">
+          {/* 3D Holocron HUD Toggle */}
+          <button
+            onClick={() => setShow3dCanvas(!show3dCanvas)}
+            title="Toggle 3D DOM Topology HUD"
+            className="flex items-center gap-1 text-[11px] text-cyan-400 bg-cyan-950/70 hover:bg-cyan-900/80 px-2 py-0.5 rounded border border-cyan-500/40 transition-colors shadow-sm"
+          >
+            <Orbit className={`w-3 h-3 ${show3dCanvas ? "animate-spin" : ""}`} />
+            <span>3D HUD</span>
+          </button>
+
           {bundle?.browserbaseSessionId && (
             <a
               href={`https://www.browserbase.com/sessions/${bundle.browserbaseSessionId}`}
               target="_blank"
               rel="noreferrer"
               title="Open Browserbase Cloud Session Replay"
-              className="flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-950/70 hover:bg-emerald-900/80 px-2 py-0.5 rounded border border-emerald-500/40 transition-colors"
+              className="hidden sm:flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-950/70 hover:bg-emerald-900/80 px-2 py-0.5 rounded border border-emerald-500/40 transition-colors shadow-sm"
             >
               <ExternalLink className="w-3 h-3" />
-              <span>Browserbase Session</span>
+              <span>Browserbase</span>
             </a>
-          )}
-          {bundle?.sentryTraceId && (
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
-              <Activity className="w-3.5 h-3.5 text-purple-400" />
-              <span className="hidden sm:inline">Trace:</span>
-              <span className="text-purple-300 bg-purple-950/60 px-1.5 py-0.5 rounded border border-purple-500/30">
-                {bundle.sentryTraceId.slice(0, 14)}...
-              </span>
-            </div>
           )}
         </div>
       </div>
 
-      {/* Pathology Counter Bar */}
+      {/* Embedded Interactive 3D DOM Topology Holocron */}
+      {show3dCanvas && (
+        <div className="border-b border-slate-800 p-2 bg-slate-950/90 animate-card-reveal">
+          <Spectral3DCanvas sliderValue={isLoading ? 50 : 0} isLoading={isLoading} />
+        </div>
+      )}
+
+      {/* Pathology Counter Bar with Sonar Radar Effect */}
       {bundle && (
-        <div className="bg-slate-900/60 border-b border-slate-800 px-3 py-2 grid grid-cols-3 gap-2 text-center text-[11px]">
-          <div className="p-1 rounded bg-slate-950 border border-slate-800">
+        <div className="relative overflow-hidden bg-slate-900/60 border-b border-slate-800 px-3 py-2 grid grid-cols-3 gap-2 text-center text-[11px]">
+          {/* Sweeping Sonar Radar Light Beam */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/10 to-transparent -translate-x-full animate-[shimmerFlow_3s_infinite]" />
+
+          <div className="relative p-1 rounded bg-slate-950 border border-slate-800 transition-all hover:border-amber-500/40">
             <span className="block text-slate-400">Images Healed</span>
             <span className="font-bold text-amber-400 text-sm">
               {bundle.manifest.brokenImages.length}
             </span>
           </div>
-          <div className="p-1 rounded bg-slate-950 border border-slate-800">
+          <div className="relative p-1 rounded bg-slate-950 border border-slate-800 transition-all hover:border-cyan-500/40">
             <span className="block text-slate-400">Links Exhumed</span>
             <span className="font-bold text-cyan-400 text-sm">
               {bundle.manifest.deadLinks.length}
             </span>
           </div>
-          <div className="p-1 rounded bg-slate-950 border border-slate-800">
+          <div className="relative p-1 rounded bg-slate-950 border border-slate-800 transition-all hover:border-emerald-500/40">
             <span className="block text-slate-400">CGI Scripts Shimmed</span>
             <span className="font-bold text-emerald-400 text-sm">
               {bundle.manifest.defunctScriptsAndForms.length}
@@ -76,28 +101,35 @@ export function ArchaeologyTerminal({ bundle, logs, isLoading }: ArchaeologyTerm
         </div>
       )}
 
-      {/* Log Stream Body */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2">
+      {/* Log Stream Body with Smooth Auto-Scroll */}
+      <div ref={logContainerRef} className="flex-1 overflow-y-auto p-3 space-y-2 scroll-smooth">
         {logs.map((log) => {
           let badgeColor = "text-blue-400 bg-blue-950/60 border-blue-500/40";
+          let borderGlow = "border-slate-800/80";
           let Icon = Activity;
 
           if (log.level === "warn") {
             badgeColor = "text-amber-400 bg-amber-950/60 border-amber-500/40";
+            borderGlow = "border-amber-500/30";
             Icon = AlertTriangle;
           } else if (log.level === "ectoplasm") {
             badgeColor = "text-emerald-400 bg-emerald-950/60 border-emerald-500/40 shadow-[0_0_8px_rgba(57,255,20,0.2)]";
+            borderGlow = "border-emerald-500/50 shadow-[0_0_12px_rgba(57,255,20,0.15)]";
             Icon = Flame;
           } else if (log.level === "success") {
             badgeColor = "text-cyan-400 bg-cyan-950/60 border-cyan-500/40";
+            borderGlow = "border-cyan-500/30";
             Icon = CheckCircle;
           }
 
           return (
-            <div key={log.id} className="p-2 rounded bg-slate-900/50 border border-slate-800/80 leading-relaxed">
+            <div
+              key={log.id}
+              className={`p-2.5 rounded-lg bg-slate-900/60 border transition-all duration-300 leading-relaxed animate-card-reveal ${borderGlow}`}
+            >
               <div className="flex items-center justify-between text-[10px] text-slate-500 mb-1">
                 <span className="text-slate-400">[{log.timestamp}]</span>
-                <span className={`px-1.5 py-0.2 rounded border flex items-center gap-1 ${badgeColor}`}>
+                <span className={`px-1.5 py-0.5 rounded border flex items-center gap-1 ${badgeColor}`}>
                   <Icon className="w-3 h-3" />
                   {log.stage}
                 </span>
@@ -120,7 +152,7 @@ export function ArchaeologyTerminal({ bundle, logs, isLoading }: ArchaeologyTerm
         <div className="border-t border-slate-800 bg-slate-900/80 p-2">
           <button
             onClick={() => setShowProvenanceDrawer(!showProvenanceDrawer)}
-            className="w-full py-1.5 px-2 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs flex items-center justify-between transition-colors"
+            className="w-full py-1.5 px-2 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs flex items-center justify-between transition-colors shadow-sm"
           >
             <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
               <Shield className="w-3.5 h-3.5" /> SerpApi Provenance Citations ({bundle.lore.length})
@@ -129,9 +161,9 @@ export function ArchaeologyTerminal({ bundle, logs, isLoading }: ArchaeologyTerm
           </button>
 
           {showProvenanceDrawer && (
-            <div className="mt-2 space-y-2 max-h-48 overflow-y-auto p-1">
+            <div className="mt-2 space-y-2 max-h-48 overflow-y-auto p-1 animate-card-reveal">
               {bundle.lore.map((item, idx) => (
-                <div key={idx} className="p-2 rounded bg-slate-950 border border-slate-800/80 text-[11px]">
+                <div key={idx} className="p-2.5 rounded bg-slate-950 border border-slate-800/80 text-[11px] hover:border-slate-700 transition-colors">
                   <div className="flex items-center justify-between text-slate-400 mb-1">
                     <span className="font-semibold text-slate-200">{item.sourceTitle}</span>
                     <span className="text-emerald-400 text-[10px]">Confidence: {(item.relevanceConfidence * 100).toFixed(0)}%</span>

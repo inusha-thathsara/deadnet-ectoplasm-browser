@@ -4,7 +4,7 @@
  * to uncover surviving historical evidence for broken 1990s pages and missing files.
  */
 
-import { HistoricalLoreSnippet } from "../types";
+import type { HistoricalLoreSnippet } from "../types/index.ts";
 
 export async function searchHistoricalLore(
   targetUrl: string,

@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local proposal & drafts
+DeadNet_Ectoplasm_Browser_Proposal.docx
+docs/

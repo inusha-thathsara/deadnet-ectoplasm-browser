@@ -48,6 +48,27 @@ export default function DeadNetBrowserHome() {
     }
   };
 
+  // Synthesize authentic ghostly voice whisper via ElevenLabs
+  const playElevenLabsWhisper = async (text: string) => {
+    if (!audioEnabled) return;
+    try {
+      const res = await fetch("/api/whisper", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text })
+      });
+      if (res.ok) {
+        const blob = await res.blob();
+        const audioUrl = URL.createObjectURL(blob);
+        const audio = new Audio(audioUrl);
+        audio.volume = 0.85;
+        audio.play().catch(() => {});
+      }
+    } catch {
+      // Audio fallback
+    }
+  };
+
   const handleSliderChange = (newVal: number) => {
     setSliderValue(newVal);
     playRetroSound(newVal === 50 ? 520 : newVal === 100 ? 1200 : 380, "square", 0.09);
@@ -99,6 +120,7 @@ export default function DeadNetBrowserHome() {
               } else if (payload.type === "complete") {
                 setBundle(payload.bundle);
                 playRetroSound(950, "sine", 0.15);
+                playElevenLabsWhisper(`A digital ancestor awakens from ${payload.bundle.era}. ${payload.bundle.title}.`);
               }
             } catch {
               // ignore malformed chunks
@@ -156,6 +178,7 @@ export default function DeadNetBrowserHome() {
               } else if (payload.type === "complete") {
                 setBundle(payload.bundle);
                 playRetroSound(1100, "sine", 0.18);
+                playElevenLabsWhisper(`A digital ancestor awakens from ${payload.bundle.era}. ${payload.bundle.title}.`);
               }
             } catch {
               // ignore malformed chunks

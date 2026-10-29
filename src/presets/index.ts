@@ -1,4 +1,4 @@
-import { PresetSite } from "../types";
+import type { PresetSite } from "../types/index.ts";
 
 export const GOLDEN_PRESETS: PresetSite[] = [
   {
@@ -135,7 +135,7 @@ OFFSET 0x004A: Set [FF FF] -> All 130 Emblems Unlocked!
 OFFSET 0x0062: Set [03 E7] -> 999 Rings in Chaos Garden!
 OFFSET 0x008C: Set [01]    -> Super Sonic in Action Stages!
           </pre>
-          <p><a href="javascript:alert('Hex offsets saved to clipboard! Ready to flash to your VMU emulator.')">📥 [COPY VERIFIED VMU OFFSETS TO CLIPBOARD]</a></p>
+          <p><a href="javascript:showEctoNotice('Hex offsets saved to clipboard! Ready to flash to your VMU emulator.')">📥 [COPY VERIFIED VMU OFFSETS TO CLIPBOARD]</a></p>
         </div>
 
         <h2 id="reviews">⚔️ SOUL CALIBUR J-IMPORT LAUNCH REVIEW</h2>
@@ -160,7 +160,7 @@ OFFSET 0x008C: Set [01]    -> Super Sonic in Action Stages!
           Monitor: 17" Trinitron CRT</p>
           <hr color="#00FFCC">
           <p><b>RING OF DREAMCAST WEBSITES:</b></p>
-          <p>[ <a href="javascript:alert('Navigating to Webring Neighbor: Sonic Chaos Central')">&lt;&lt; Prev</a> ] [ <a href="javascript:alert('Random Dreamcast Webring Hop')">Random</a> ] [ <a href="javascript:alert('Next Webring Site: VMU Paradise')">Next &gt;&gt;</a> ]</p>
+          <p>[ <a href="javascript:showEctoNotice('Navigating to Webring Neighbor: Sonic Chaos Central')">&lt;&lt; Prev</a> ] [ <a href="javascript:showEctoNotice('Random Dreamcast Webring Hop')">Random</a> ] [ <a href="javascript:showEctoNotice('Next Webring Site: VMU Paradise')">Next &gt;&gt;</a> ]</p>
         </div>
       </td>
     </tr>
@@ -195,6 +195,19 @@ OFFSET 0x008C: Set [01]    -> Super Sonic in Action Stages!
   </table>
 
   <script>
+    function showEctoNotice(msg) {
+      var toast = document.getElementById('ecto-retro-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'ecto-retro-toast';
+        toast.style = 'position:fixed; bottom:20px; right:20px; background:#002b11; color:#39FF14; border:2px solid #39FF14; padding:10px 16px; font-family:monospace; font-size:12px; font-weight:bold; box-shadow:0 0 15px rgba(57,255,20,0.5); z-index:99999; border-radius:4px;';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = '🔮 [ECTOPLASM SHIM]: ' + msg;
+      toast.style.display = 'block';
+      setTimeout(function() { toast.style.display = 'none'; }, 3500);
+    }
+
     function handleGuestbookSubmit(e) {
       e.preventDefault();
       var name = document.getElementById('gb-name').value;
@@ -202,10 +215,10 @@ OFFSET 0x008C: Set [01]    -> Super Sonic in Action Stages!
       var list = document.getElementById('guestbook-list');
       var entry = document.createElement('div');
       entry.className = 'guestbook-entry';
-      entry.innerHTML = '<b>' + name + '</b> (Today - Just now):<br>"' + msg + '"';
+      entry.innerHTML = '<b>' + name + '</b> (Today - Just now via Client Shim):<br>"' + msg + '"';
       list.prepend(entry);
-      document.getElementById('gb-message').value = '';
-      alert('Guestbook entry recorded into local Ectoplasm storage shim!');
+      document.getElementById('gb-name').value = '';
+      showEctoNotice('Guestbook entry recorded into local Ectoplasm storage shim!');
       return false;
     }
   </script>
@@ -524,13 +537,27 @@ $ aura3dd --daemonize --channels=4
   <h2>3. HISTORICAL BUG TRACKER (CLIENT SHIM)</h2>
   <div class="reconstructed-card">
     <p><b>Report Bug / Feature Request (DeadNet Reanimated Client):</b></p>
-    <form onsubmit="alert('Bug report stored in local state! Historical open-source ticket archived.'); return false;">
+    <form onsubmit="showEctoNotice('Bug report stored in local state! Historical open-source ticket archived.'); return false;">
       Component: <select><option>HRTF Convolution Engine</option><option>Vortex 2 ioctl driver</option><option>BeOS MediaKit</option></select><br><br>
       Stack Trace / Kernel Log:<br>
       <textarea style="width:100%; height:60px;" placeholder="kernel: aura3d: dsp buffer overrun at 0x00FF41..."></textarea><br><br>
       <input type="submit" value="Submit to Bugzilla v1.2">
     </form>
   </div>
+  <script>
+    function showEctoNotice(msg) {
+      var toast = document.getElementById('ecto-retro-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'ecto-retro-toast';
+        toast.style = 'position:fixed; bottom:20px; right:20px; background:#002b11; color:#39FF14; border:2px solid #39FF14; padding:10px 16px; font-family:monospace; font-size:12px; font-weight:bold; box-shadow:0 0 15px rgba(57,255,20,0.5); z-index:99999; border-radius:4px;';
+        document.body.appendChild(toast);
+      }
+      toast.innerHTML = '🔮 [ECTOPLASM SHIM]: ' + msg;
+      toast.style.display = 'block';
+      setTimeout(function() { toast.style.display = 'none'; }, 3500);
+    }
+  </script>
 </body>
 </html>`,
       xrayHtml1998: `<!DOCTYPE html>
@@ -756,12 +783,26 @@ $ aura3dd --daemonize --channels=4
         </blockquote>
 
         <h2>SUBMIT YOUR SIGHTING (CLIENT SHIM)</h2>
-        <form onsubmit="alert('Sighting transmitted to Ectoplasm local archive! SpookyBob salutes your bravery.'); return false;" style="background:#002200; padding:8px; border:1px solid #FF00FF;">
+        <form onsubmit="showEctoNotice('Sighting transmitted to Ectoplasm local archive! SpookyBob salutes your bravery.'); return false;" style="background:#002200; padding:8px; border:1px solid #FF00FF;">
           Town / Cemetery: <input type="text" placeholder="e.g. Salem, MA" style="background:#000; color:#00FF00;"><br><br>
           Anomaly Description: <br>
           <textarea style="width:100%; background:#000; color:#00FF00;" placeholder="Did you see an orb? Did your EMF meter spike?"></textarea><br><br>
           <input type="submit" value="TRANSMIT REPORT TO SPOOKYBOB98" style="background:#FF00FF; color:#FFF; font-weight:bold; cursor:pointer;">
         </form>
+        <script>
+          function showEctoNotice(msg) {
+            var toast = document.getElementById('ecto-retro-toast');
+            if (!toast) {
+              toast = document.createElement('div');
+              toast.id = 'ecto-retro-toast';
+              toast.style = 'position:fixed; bottom:20px; right:20px; background:#002b11; color:#39FF14; border:2px solid #39FF14; padding:10px 16px; font-family:monospace; font-size:12px; font-weight:bold; box-shadow:0 0 15px rgba(57,255,20,0.5); z-index:99999; border-radius:4px;';
+              document.body.appendChild(toast);
+            }
+            toast.innerHTML = '🔮 [ECTOPLASM SHIM]: ' + msg;
+            toast.style.display = 'block';
+            setTimeout(function() { toast.style.display = 'none'; }, 3500);
+          }
+        </script>
       </td>
       <td width="35%" style="text-align:center; vertical-align:top;">
         <div style="border:2px solid #FF00FF; padding:8px;">
