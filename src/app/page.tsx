@@ -22,6 +22,33 @@ export default function DeadNetBrowserHome() {
   const [isTerminalCollapsed, setIsTerminalCollapsed] = useState<boolean>(false);
 
   const audioContextRef = useRef<AudioContext | null>(null);
+  const activeAudioRef = useRef<HTMLAudioElement | null>(null);
+  const narrationAbortRef = useRef<AbortController | null>(null);
+  const exhumationAbortRef = useRef<AbortController | null>(null);
+
+  // Immediately terminate and release any active voice narration
+  const stopCurrentNarration = () => {
+    if (narrationAbortRef.current) {
+      narrationAbortRef.current.abort();
+      narrationAbortRef.current = null;
+    }
+    if (activeAudioRef.current) {
+      activeAudioRef.current.pause();
+      activeAudioRef.current.currentTime = 0;
+      activeAudioRef.current.src = "";
+      activeAudioRef.current = null;
+    }
+    setIsNarrating(false);
+  };
+
+  useEffect(() => {
+    return () => {
+      stopCurrentNarration();
+      if (exhumationAbortRef.current) {
+        exhumationAbortRef.current.abort();
+      }
+    };
+  }, []);
 
   // Synthesize retro computer sound effect (Web Audio API)
   const playRetroSound = (freq = 800, type: OscillatorType = "sine", duration = 0.08) => {
@@ -49,34 +76,68 @@ export default function DeadNetBrowserHome() {
     }
   };
 
-  // Synthesize authentic ghostly voice whisper via ElevenLabs
+  // Synthesize authentic ghostly voice whisper via ElevenLabs (guaranteed single active stream)
   const playElevenLabsWhisper = async (text: string, force = false) => {
     if (!audioEnabled && !force) return;
+
+    // 1. Immediately kill any current audio and abort any pending whisper request
+    stopCurrentNarration();
+
+    const controller = new AbortController();
+    narrationAbortRef.current = controller;
     setIsNarrating(true);
+
     try {
       const res = await fetch("/api/whisper", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text })
+        body: JSON.stringify({ text }),
+        signal: controller.signal
       });
-      if (res.ok) {
-        const blob = await res.blob();
-        const audioUrl = URL.createObjectURL(blob);
-        const audio = new Audio(audioUrl);
-        audio.volume = 0.9;
-        audio.onended = () => setIsNarrating(false);
-        audio.onerror = () => setIsNarrating(false);
-        await audio.play();
-      } else {
+
+      if (!res.ok) {
+        setIsNarrating(false);
+        return;
+      }
+
+      const blob = await res.blob();
+      if (controller.signal.aborted) return;
+
+      const audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(audioUrl);
+      audio.volume = 0.9;
+      activeAudioRef.current = audio;
+
+      audio.onended = () => {
+        if (activeAudioRef.current === audio) {
+          activeAudioRef.current = null;
+          setIsNarrating(false);
+          URL.revokeObjectURL(audioUrl);
+        }
+      };
+
+      audio.onerror = () => {
+        if (activeAudioRef.current === audio) {
+          activeAudioRef.current = null;
+          setIsNarrating(false);
+          URL.revokeObjectURL(audioUrl);
+        }
+      };
+
+      await audio.play();
+    } catch (err: unknown) {
+      if ((err as Error)?.name !== "AbortError") {
         setIsNarrating(false);
       }
-    } catch {
-      setIsNarrating(false);
     }
   };
 
   const handleTriggerNarration = () => {
-    if (isNarrating) return;
+    if (isNarrating) {
+      // Clicking while already narrating stops it cleanly (acts as play/stop toggle)
+      stopCurrentNarration();
+      return;
+    }
     if (!audioEnabled) setAudioEnabled(true);
     const siteTitle = bundle?.title || "The Spiral GeoCities Hub";
     const siteEra = bundle?.era || "1999";
@@ -96,6 +157,16 @@ export default function DeadNetBrowserHome() {
     const preset = GOLDEN_PRESETS.find((p) => p.id === presetId);
     if (!preset) return;
 
+    // Immediately stop any currently playing or pending voice narration
+    stopCurrentNarration();
+
+    // Abort previous in-flight exhumation stream so it doesn't trigger late audio
+    if (exhumationAbortRef.current) {
+      exhumationAbortRef.current.abort();
+    }
+    const controller = new AbortController();
+    exhumationAbortRef.current = controller;
+
     setSelectedPresetId(preset.id);
     setCurrentUrl(preset.originalUrl);
     setIsLoading(true);
@@ -106,7 +177,8 @@ export default function DeadNetBrowserHome() {
       const response = await fetch("/api/exhume", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ presetId: preset.id })
+        body: JSON.stringify({ presetId: preset.id }),
+        signal: controller.signal
       });
 
       if (!response.body) {
@@ -123,6 +195,10 @@ export default function DeadNetBrowserHome() {
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
+        if (controller.signal.aborted) {
+          reader.cancel().catch(() => {});
+          return;
+        }
 
         streamBuffer += decoder.decode(value, { stream: true });
         const lines = streamBuffer.split("\n\n");
@@ -136,6 +212,7 @@ export default function DeadNetBrowserHome() {
                 setLogs((prev) => [...prev, payload.log]);
                 playRetroSound(700 + Math.random() * 200, "triangle", 0.04);
               } else if (payload.type === "complete") {
+                if (controller.signal.aborted) return;
                 setBundle(payload.bundle);
                 playRetroSound(950, "sine", 0.15);
                 playElevenLabsWhisper(`A digital ancestor awakens from ${payload.bundle.era}. ${payload.bundle.title}.`);
@@ -146,16 +223,31 @@ export default function DeadNetBrowserHome() {
           }
         }
       }
-    } catch (err) {
+    } catch (err: unknown) {
+      if ((err as Error)?.name === "AbortError") {
+        return;
+      }
       console.warn("Stream error, falling back to instant preset:", err);
       setBundle(preset.bundle);
       setLogs(preset.bundle.telemetryLogs);
     } finally {
-      setIsLoading(false);
+      if (!controller.signal.aborted) {
+        setIsLoading(false);
+      }
     }
   };
 
   const handleExhumeCustomUrl = async (url: string) => {
+    // Immediately stop any currently playing or pending voice narration
+    stopCurrentNarration();
+
+    // Abort previous in-flight exhumation stream
+    if (exhumationAbortRef.current) {
+      exhumationAbortRef.current.abort();
+    }
+    const controller = new AbortController();
+    exhumationAbortRef.current = controller;
+
     setSelectedPresetId("");
     setCurrentUrl(url);
     setIsLoading(true);
@@ -166,7 +258,8 @@ export default function DeadNetBrowserHome() {
       const response = await fetch("/api/exhume", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url })
+        body: JSON.stringify({ url }),
+        signal: controller.signal
       });
 
       if (!response.body) {
@@ -181,6 +274,10 @@ export default function DeadNetBrowserHome() {
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
+        if (controller.signal.aborted) {
+          reader.cancel().catch(() => {});
+          return;
+        }
 
         streamBuffer += decoder.decode(value, { stream: true });
         const lines = streamBuffer.split("\n\n");
@@ -194,6 +291,7 @@ export default function DeadNetBrowserHome() {
                 setLogs((prev) => [...prev, payload.log]);
                 playRetroSound(600 + Math.random() * 300, "sine", 0.04);
               } else if (payload.type === "complete") {
+                if (controller.signal.aborted) return;
                 setBundle(payload.bundle);
                 playRetroSound(1100, "sine", 0.18);
                 playElevenLabsWhisper(`A digital ancestor awakens from ${payload.bundle.era}. ${payload.bundle.title}.`);
@@ -204,10 +302,15 @@ export default function DeadNetBrowserHome() {
           }
         }
       }
-    } catch (err) {
+    } catch (err: unknown) {
+      if ((err as Error)?.name === "AbortError") {
+        return;
+      }
       console.warn("Exhumation stream failed:", err);
     } finally {
-      setIsLoading(false);
+      if (!controller.signal.aborted) {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -227,7 +330,12 @@ export default function DeadNetBrowserHome() {
         sliderValue={sliderValue}
         onChange={handleSliderChange}
         audioEnabled={audioEnabled}
-        onToggleAudio={() => setAudioEnabled(!audioEnabled)}
+        onToggleAudio={() => {
+          if (audioEnabled) {
+            stopCurrentNarration();
+          }
+          setAudioEnabled(!audioEnabled);
+        }}
         isNarrating={isNarrating}
         onTriggerNarration={handleTriggerNarration}
       />
