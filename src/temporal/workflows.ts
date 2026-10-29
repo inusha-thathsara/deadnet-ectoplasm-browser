@@ -50,12 +50,12 @@ export async function executeResurrectionPipeline(
   const bestSnapshot = snapshots[0];
   emit("DISCOVERY", "info", `Selected snapshot timestamp: ${bestSnapshot.timestamp}. Applying id_ modifier to bypass toolbar.`);
 
-  // Activity 2: Headless DOM Exhumation via Stagehand + Browserbase
-  emit("EXHUMATION", "info", `Dispatching Stagehand headless scanner to examine DOM tree...`);
+  // Activity 2: Headless DOM Exhumation
+  emit("EXHUMATION", "info", `Dispatching headless archival scanner to examine DOM tree...`);
   const rawHtml = await fetchRawArchivalHtml(bestSnapshot.rawSnapshotUrl);
   const { manifest, browserbaseSessionId } = await extractDomPathology(rawHtml, targetUrl);
   if (browserbaseSessionId) {
-    emit("EXHUMATION", "ectoplasm", `Browserbase Cloud Session active: ${browserbaseSessionId} (https://www.browserbase.com/sessions/${browserbaseSessionId})`);
+    emit("EXHUMATION", "ectoplasm", `Cloud sandbox session active: ${browserbaseSessionId}`);
   }
   emit(
     "EXHUMATION",
@@ -63,21 +63,21 @@ export async function executeResurrectionPipeline(
     `DOM Pathology: ${manifest.brokenImages.length} broken images, ${manifest.deadLinks.length} dead links, ${manifest.defunctScriptsAndForms.length} defunct CGI forms detected.`
   );
 
-  // Activity 3: Historical Lore Grounding via SerpApi
-  emit("HISTORICAL_GROUNDING", "info", `Querying SerpApi for forum, USENET, and archival discussions about '${manifest.siteTitle}'...`);
+  // Activity 3: Historical Lore Grounding
+  emit("HISTORICAL_GROUNDING", "info", `Querying archival forums, USENET records, and discussion indexes about '${manifest.siteTitle}'...`);
   const lore = await searchHistoricalLore(targetUrl, manifest.siteTitle, manifest.deadLinks[0]?.expectedTopic || "archive");
   emit("HISTORICAL_GROUNDING", "info", `Retrieved ${lore.length} verified historical citations from historical web indices.`);
 
-  // Activity 4: Gemma 3 Necromancy Engine (3-Pass Synthesis)
-  emit("NECROMANCY", "ectoplasm", `Invoking Gemma 3 open-weight engine for Pass 1 (HTML 3.2 Healer) & Pass 2 (CGI-to-JS Reanimator)...`);
+  // Activity 4: Digital Archaeology Engine (3-Pass Synthesis)
+  emit("NECROMANCY", "ectoplasm", `Invoking digital archaeology engine for Pass 1 (HTML 3.2 Healer) & Pass 2 (CGI-to-JS Reanimator)...`);
   const gemmaRes = await callGemmaInference(
     GEMMA_PASS1_SYSTEM_PROMPT,
     `Site: ${manifest.siteTitle}\nEra: ${manifest.estimatedEra}\nBroken Links: ${JSON.stringify(manifest.deadLinks)}\nLore: ${JSON.stringify(lore)}\nSurviving Content: ${manifest.survivingMainContent}`
   );
-  emit("NECROMANCY", "ectoplasm", `Gemma 3 synthesized restored markup in ${gemmaRes.latencyMs}ms (${gemmaRes.completionTokens} tokens generated).`);
+  emit("NECROMANCY", "ectoplasm", `Digital engine synthesized restored markup in ${gemmaRes.latencyMs}ms (${gemmaRes.completionTokens} tokens generated).`);
 
   // Activity 5: Workflow State Consolidation
-  emit("DURABILITY", "success", `Temporal ExhumationWorkflow execution succeeded. State committed to durable storage.`);
+  emit("DURABILITY", "success", `Autonomous exhumation workflow succeeded. State committed to storage.`);
 
   const restoredHtml = `<!DOCTYPE html>
 <html>
@@ -115,7 +115,7 @@ export async function executeResurrectionPipeline(
             <small>Surviving context: <i>${manifest.brokenImages[0].surroundingContext.replace(/<[^>]+>/g, '') || "Archival banner"}</i></small>
           </div>
         ` : ''}
-        ${gemmaRes.text ? `<div style="background:#001a1a; border-left:3px solid #00FFFF; padding:8px; margin:10px 0;"><small><font color="#00FFFF"><b>Gemma 3 Synthesis:</b></font><br>${gemmaRes.text}</small></div>` : ''}
+        ${gemmaRes.text ? `<div style="background:#001a1a; border-left:3px solid #00FFFF; padding:8px; margin:10px 0;"><small><font color="#00FFFF"><b>AI Provenance Synthesis:</b></font><br>${gemmaRes.text}</small></div>` : ''}
       </td>
     </tr>
   </table>
@@ -190,7 +190,7 @@ export async function executeResurrectionPipeline(
       box-shadow: 0 0 12px rgba(57, 255, 20, 0.4);
     }
     [data-ectoplasm="reconstructed"]::before {
-      content: "🔮 ECTOPLASM RECONSTRUCTION [Gemma 3 Open-Weight Inference]";
+      content: "🔮 ECTOPLASM RECONSTRUCTION [AI Provenance Synthesis]";
       display: block;
       background: #39FF14;
       color: #000;
@@ -210,13 +210,13 @@ export async function executeResurrectionPipeline(
       <p>${manifest.survivingMainContent}</p>
       <div data-ectoplasm="reconstructed" data-evidence="${lore[0]?.sourceTitle || 'USENET / Forum Lore Archive'}">
         <b>[HEALED HISTORICAL NODE]:</b><br>
-        ${gemmaRes.text || "Historical context verified against SerpApi search records. Missing links grounded in verified webring archives."}
+        ${gemmaRes.text || "Historical context verified against archival records. Missing links grounded in verified webring archives."}
       </div>
     </td></tr>
   </table>
 
   <h2>EXHUMED PATHOLOGY MANIFEST</h2>
-  <div data-ectoplasm="reconstructed" data-evidence="Stagehand DOM Pathology Extractor">
+  <div data-ectoplasm="reconstructed" data-evidence="Archival DOM Pathology Scanner">
     <ul>
       <li>Broken Images Detected: ${manifest.brokenImages.length}</li>
       <li>Dead Hyperlinks Isolated: ${manifest.deadLinks.length}</li>
@@ -246,7 +246,7 @@ export async function executeResurrectionPipeline(
       title: `Exhumed Resource: ${link.anchorText || link.href}`,
       date: "Era: 1999",
       author: manifest.originalAuthorHandle || "Webmaster",
-      content: `Target Destination: ${link.expectedTopic}. Original link pointed to '${link.href}'. Grounded and reanimated via Gemma 3 and SerpApi archival retrieval.`,
+      content: `Target Destination: ${link.expectedTopic}. Original link pointed to '${link.href}'. Grounded and reanimated via historical record retrieval.`,
       tags: ["Reconstructed", "Link Rot Healed"],
       confidence: 0.92,
       isAiReconstructed: true,

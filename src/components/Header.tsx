@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Ghost, Sparkles, Terminal, Globe, Flame, ShieldAlert, Cpu } from "lucide-react";
+import { Ghost, Sparkles, Terminal, Globe, Flame } from "lucide-react";
 import { GOLDEN_PRESETS } from "@/presets";
 
 interface HeaderProps {
@@ -50,20 +50,8 @@ export function Header({
               </span>
             </div>
             <p className="text-[11px] text-slate-400">
-              Autonomous Digital Archaeology & Web Resurrection Engine • Powered by Open-Weight Gemma 3
+              Autonomous Digital Archaeology & Web Resurrection Engine
             </p>
-          </div>
-        </div>
-
-        {/* Live Engine Badges */}
-        <div className="hidden lg:flex items-center gap-2 font-mono text-[11px]">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300">
-            <Cpu className="w-3.5 h-3.5 text-blue-400" />
-            <span>Gemma 3 (Open Weights)</span>
-          </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300">
-            <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Temporal Durable State</span>
           </div>
         </div>
       </div>

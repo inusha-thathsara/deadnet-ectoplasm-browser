@@ -16,15 +16,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://deadnet-browser.tech"),
   title: "DeadNet Ectoplasm Browser — Autonomous Digital Archaeology & Web Resurrection",
   description:
-    "An autonomous digital archaeology agent and dual-engine web browser powered by open-weight Gemma 3, Stagehand headless DOM exhumation, SerpApi historical grounding, and Temporal durable workflows.",
+    "An autonomous digital archaeology engine and dual-engine web browser that exhumes decaying late-1990s websites and resurrects them into living, interactive software.",
   keywords: [
-    "open-source ai",
-    "gemma 3",
-    "digital preservation",
-    "stagehand",
-    "browserbase",
-    "temporal",
-    "web archaeology"
+    "digital archaeology",
+    "web preservation",
+    "dual-engine browser",
+    "digital heritage",
+    "web resurrection",
+    "open-source"
   ],
   authors: [{ name: "DeadNet Team", url: "https://github.com" }],
   creator: "DeadNet Digital Archaeology",
@@ -34,13 +33,13 @@ export const metadata: Metadata = {
     url: "https://deadnet-browser.tech",
     title: "DeadNet Ectoplasm Browser — Autonomous Digital Archaeology",
     description:
-      "Exhuming decaying 1990s and 2000s websites into living, interactive modern software using open-weight AI and headless DOM exhumation.",
+      "Exhuming decaying 1990s and 2000s websites into living, interactive modern software in real time.",
     siteName: "DeadNet Ectoplasm Browser"
   },
   twitter: {
     card: "summary_large_image",
     title: "DeadNet Ectoplasm Browser — Autonomous Digital Archaeology",
-    description: "Exhuming the lost digital ancestors of 1999 with Gemma 3, Browserbase, and Temporal."
+    description: "Autonomous digital archaeology and web resurrection engine for early-web digital heritage."
   }
 };
 

@@ -279,7 +279,7 @@ OFFSET 0x008C: Set [01]    -> Super Sonic in Action Stages!
 
         <div data-ectoplasm="reconstructed" data-confidence="0.94" data-evidence="Surviving 2004 Sega-16 forum thread #1999 citing SonicMaster99's hex table">
           <h2>💾 RECONSTRUCTED ARTIFACT: VMU HEX ENGINE OFFSETS</h2>
-          <p>The original binary file <code>vmu_save_editor_v12.zip</code> was lost in 2009. Gemma 3 synthesized these exact byte offsets verified against historical forum mentions:</p>
+          <p>The original binary file <code>vmu_save_editor_v12.zip</code> was lost in 2009. Synthesized these exact byte offsets verified against historical forum mentions:</p>
           <pre style="background:#000; color:#39FF14; padding:6px;">
 OFFSET 0x004A: Set [FF FF] -> All 130 Emblems Unlocked!
 OFFSET 0x0062: Set [03 E7] -> 999 Rings in Chaos Garden!
@@ -347,7 +347,7 @@ OFFSET 0x0062: Set [03 E7] -> 999 Rings in Chaos Garden!
             tags: ["VMU", "Hacks", "Save Editing"],
             confidence: 0.94,
             isAiReconstructed: true,
-            evidenceCitation: "Sega-16 Forum Archives #1999 verified by SerpApi"
+            evidenceCitation: "Sega-16 Forum Archives #1999 (Historical Record)"
           },
           {
             id: "soul-calibur-review",
@@ -365,7 +365,7 @@ OFFSET 0x0062: Set [03 E7] -> 999 Rings in Chaos Garden!
         guestbookEntries: [
           { name: "Tails_Flight_99", date: "Sept 10, 1999", message: "Picked up my DC from Babbages at midnight! Sonic down the skyscraper blew my mind!", isAiSimulated: false },
           { name: "Shenmue_Seeker", date: "Sept 11, 1999", message: "Suzuki-san's vision for Yokosuka is the pinnacle of open worlds.", isAiSimulated: false },
-          { name: "Ectoplasm_Observer", date: "Oct 27, 2026", message: "Resurrected 27 years later via open-weight Gemma 3. The spiral lives on.", isAiSimulated: true }
+          { name: "Ectoplasm_Observer", date: "Oct 27, 2026", message: "Resurrected 27 years later via DeadNet Engine. The spiral lives on.", isAiSimulated: true }
         ],
         footerStats: {
           originalHits: 48291,
@@ -386,28 +386,28 @@ OFFSET 0x0062: Set [03 E7] -> 999 Rings in Chaos Garden!
           timestamp: "00:02.450",
           stage: "EXHUMATION",
           level: "warn",
-          message: "Stagehand observe() detected 3 broken image tags (naturalWidth === 0) and defunct /cgi-bin/guestbook.pl."
+          message: "Archival DOM scanner detected 3 broken image tags (naturalWidth === 0) and defunct /cgi-bin/guestbook.pl."
         },
         {
           id: "log-3",
           timestamp: "00:03.880",
           stage: "HISTORICAL_GROUNDING",
           level: "info",
-          message: "SerpApi located 2 surviving Sega-16 forum discussions detailing lost vmu_save_editor_v12.zip hex offsets."
+          message: "Historical index located 2 surviving Sega-16 forum discussions detailing lost vmu_save_editor_v12.zip hex offsets."
         },
         {
           id: "log-4",
           timestamp: "00:05.310",
           stage: "NECROMANCY",
           level: "ectoplasm",
-          message: "Gemma 3 executed Pass 1 (HTML 3.2 restoration) + Pass 2 (CGI-to-JS client shim). Provenance tags applied."
+          message: "Digital Archaeology Engine executed Pass 1 (HTML 3.2 restoration) + Pass 2 (CGI-to-JS client shim). Provenance tags applied."
         },
         {
           id: "log-5",
           timestamp: "00:06.100",
           stage: "DURABILITY",
           level: "success",
-          message: "Temporal ExhumationWorkflow completed state transition. All 3 viewport modes ready for Ectoplasm Slider scrubbing."
+          message: "Autonomous exhumation workflow completed state transition. All 3 viewport modes ready for Ectoplasm Slider scrubbing."
         }
       ],
       sentryTraceId: "sentry_trace_dc99_7f8a9b2c3d4e"
@@ -662,21 +662,21 @@ $ aura3dd --daemonize --channels=4
           timestamp: "00:02.300",
           stage: "EXHUMATION",
           level: "warn",
-          message: "Stagehand observe() detected 2 broken images and dead tarball download links."
+          message: "Archival DOM scanner detected 2 broken images and dead tarball download links."
         },
         {
           id: "log-a3",
           timestamp: "00:03.900",
           stage: "HISTORICAL_GROUNDING",
           level: "info",
-          message: "SerpApi queried Linux Audio Developer archives from 2003. Extracted verified C function signatures."
+          message: "Archival index queried Linux Audio Developer archives from 2003. Extracted verified C function signatures."
         },
         {
           id: "log-a4",
           timestamp: "00:05.100",
           stage: "NECROMANCY",
           level: "ectoplasm",
-          message: "Gemma 3 re-authored API tables and shimmed SourceForge Bugzilla form with client-side event dispatch."
+          message: "Digital Archaeology Engine re-authored API tables and shimmed SourceForge Bugzilla form with client-side event dispatch."
         }
       ],
       sentryTraceId: "sentry_trace_aura3d_89c2b4d1e"
@@ -903,14 +903,14 @@ $ aura3dd --daemonize --channels=4
           timestamp: "00:02.800",
           stage: "HISTORICAL_GROUNDING",
           level: "info",
-          message: "SerpApi searched USENET Google Groups archives for 'SpecterNet Salem EVP'. Retrieved exact verified transcript."
+          message: "Archival search indexed USENET Google Groups archives for 'SpecterNet Salem EVP'. Retrieved exact verified transcript."
         },
         {
           id: "log-s3",
           timestamp: "00:04.200",
           stage: "NECROMANCY",
           level: "ectoplasm",
-          message: "Gemma 3 synthesized vintage HTML 3.2 view with Comic Sans typography and green scanlines."
+          message: "Digital Archaeology Engine synthesized vintage HTML 3.2 view with Comic Sans typography and green scanlines."
         }
       ],
       sentryTraceId: "sentry_trace_specternet_99a1b2c3"

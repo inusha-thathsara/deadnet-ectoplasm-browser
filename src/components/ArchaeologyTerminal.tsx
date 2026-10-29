@@ -57,11 +57,11 @@ export function ArchaeologyTerminal({ bundle, logs, isLoading }: ArchaeologyTerm
               href={`https://www.browserbase.com/sessions/${bundle.browserbaseSessionId}`}
               target="_blank"
               rel="noreferrer"
-              title="Open Browserbase Cloud Session Replay"
+              title="Open Cloud Session Replay"
               className="hidden sm:flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-950/70 hover:bg-emerald-900/80 px-2 py-0.5 rounded border border-emerald-500/40 transition-colors shadow-sm"
             >
               <ExternalLink className="w-3 h-3" />
-              <span>Browserbase</span>
+              <span>Live Replay</span>
             </a>
           )}
         </div>
@@ -155,7 +155,7 @@ export function ArchaeologyTerminal({ bundle, logs, isLoading }: ArchaeologyTerm
             className="w-full py-1.5 px-2 rounded bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs flex items-center justify-between transition-colors shadow-sm"
           >
             <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
-              <Shield className="w-3.5 h-3.5" /> SerpApi Provenance Citations ({bundle.lore.length})
+              <Shield className="w-3.5 h-3.5" /> Historical Provenance Citations ({bundle.lore.length})
             </span>
             <span className="text-slate-500">{showProvenanceDrawer ? "▲ Hide" : "▼ Expand"}</span>
           </button>

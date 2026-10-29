@@ -50,7 +50,7 @@ export function DualDomViewport({ bundle, sliderValue, isLoading }: DualDomViewp
           EXHUMING ARCHIVAL DOM TREE...
         </h3>
         <p className="text-slate-400 text-xs max-w-md leading-relaxed">
-          Stagehand and Browserbase are inspecting broken assets while Gemma 3 executes multi-pass reanimation.
+          Headless scanners are inspecting broken assets while the digital archaeology engine executes multi-pass reconstruction.
         </p>
       </div>
     );

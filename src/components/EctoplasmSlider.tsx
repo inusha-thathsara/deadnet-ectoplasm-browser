@@ -30,7 +30,7 @@ export function EctoplasmSlider({
     } else if (sliderValue < 75) {
       return {
         title: "50% — HAUNTED X-RAY MODE",
-        desc: "Emerald ectoplasm highlighting AI-reconstructed nodes with hovering SerpApi provenance citations.",
+        desc: "Emerald ectoplasm highlighting AI-reconstructed nodes with hovering historical provenance citations.",
         badgeColor: "text-emerald-400 bg-emerald-950/60 border-emerald-500/40 shadow-[0_0_12px_rgba(57,255,20,0.3)]"
       };
     } else {
@@ -115,7 +115,7 @@ export function EctoplasmSlider({
             <button
               onClick={onTriggerNarration}
               disabled={isNarrating}
-              title="Trigger Eerie AI Voice Narration (ElevenLabs Turbo v2.5)"
+              title="Play Historical Voice Narration"
               className={`px-2.5 py-1 rounded-md border flex items-center gap-1.5 transition-all text-xs font-mono shadow-sm ${
                 isNarrating
                   ? "bg-purple-950/90 border-purple-500 text-purple-300 animate-pulse shadow-[0_0_12px_rgba(168,85,247,0.4)] cursor-wait"
