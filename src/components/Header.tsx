@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Ghost, Sparkles, Terminal, Globe, Flame } from "lucide-react";
+import { Ghost, Sparkles, Terminal, Globe, Flame, HelpCircle } from "lucide-react";
 import { GOLDEN_PRESETS } from "@/presets";
 
 interface HeaderProps {
@@ -59,10 +59,30 @@ export function Header({
       {/* Preset Selector & Custom URL Summoner Bar */}
       <div className="max-w-7xl mx-auto mt-3 pt-2 border-t border-slate-800/60 flex flex-col sm:flex-row items-center gap-2 justify-between">
         {/* 1-Click Golden Presets */}
-        <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
-          <span className="text-xs font-mono text-slate-400 flex items-center gap-1 mr-1">
-            <Flame className="w-3.5 h-3.5 text-orange-400" /> Presets:
-          </span>
+        <div className="flex items-center gap-1.5 flex-wrap sm:flex-nowrap w-full sm:w-auto pb-1 sm:pb-0">
+          <div className="relative group flex items-center gap-1 mr-1">
+            <span className="text-xs font-mono text-slate-400 flex items-center gap-1">
+              <Flame className="w-3.5 h-3.5 text-orange-400" /> Presets
+            </span>
+            <button
+              type="button"
+              aria-label="What are presets?"
+              className="text-slate-500 hover:text-emerald-400 focus:outline-none transition-colors"
+            >
+              <HelpCircle className="w-3.5 h-3.5 cursor-help" />
+            </button>
+
+            {/* Hover Tooltip Hint */}
+            <div className="pointer-events-none absolute left-0 top-full mt-2 z-50 w-72 p-3 rounded-lg bg-slate-900 border border-slate-700/80 text-[11px] font-mono text-slate-300 shadow-2xl backdrop-blur-md opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all duration-200 translate-y-1 group-hover:translate-y-0">
+              <div className="flex items-center gap-1.5 text-emerald-400 font-bold mb-1">
+                <Sparkles className="w-3 h-3 text-emerald-400" />
+                <span>1-Click Historical Demos</span>
+              </div>
+              <p className="text-slate-300 leading-relaxed text-[11px]">
+                Authentic decaying 1998–2002 websites pre-loaded with broken images, dead links, and defunct CGI scripts so you can test exhumation and reconstruction without hunting for URLs.
+              </p>
+            </div>
+          </div>
           {GOLDEN_PRESETS.map((preset) => {
             const isSelected = selectedPresetId === preset.id;
             return (
