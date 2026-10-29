@@ -8,6 +8,7 @@
 [![Temporal Workflows](https://img.shields.io/badge/Temporal-Durable_Workflows-000000?style=for-the-badge&logo=temporal)](https://temporal.io)
 [![Sentry Agent Tracing](https://img.shields.io/badge/Sentry-Agent_Tracing-362D59?style=for-the-badge&logo=sentry)](https://sentry.io)
 [![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Finusha-thathsara%2Fdeadnet-ectoplasm-browser&project-name=deadnet-ectoplasm-browser&repo-name=deadnet-ectoplasm-browser&env=OPENROUTER_API_KEY,ELEVENLABS_API_KEY,BROWSERBASE_API_KEY,BROWSERBASE_PROJECT_ID)
 
 ---
 
@@ -217,7 +218,21 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 5. Production Docker Deployment
+### 5. Cloud & Production Deployment
+
+#### Option A: 1-Click Vercel Deployment (Recommended)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Finusha-thathsara%2Fdeadnet-ectoplasm-browser&project-name=deadnet-ectoplasm-browser&repo-name=deadnet-ectoplasm-browser&env=OPENROUTER_API_KEY,ELEVENLABS_API_KEY,BROWSERBASE_API_KEY,BROWSERBASE_PROJECT_ID)
+
+Or deploy via the Vercel CLI:
+```bash
+# 1. Login to Vercel
+npx vercel login
+
+# 2. Deploy to production
+npx vercel --prod
+```
+
+#### Option B: Production Docker Deployment
 DeadNet can be spun up in an isolated multi-stage container alongside a local Ollama instance:
 ```bash
 # Build and run the production container stack
