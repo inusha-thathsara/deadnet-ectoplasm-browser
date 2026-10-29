@@ -18,6 +18,7 @@ export default function DeadNetBrowserHome() {
   const [logs, setLogs] = useState<TelemetryLogEntry[]>(defaultPreset.bundle.telemetryLogs);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [audioEnabled, setAudioEnabled] = useState<boolean>(false);
+  const [isNarrating, setIsNarrating] = useState<boolean>(false);
   const [isTerminalCollapsed, setIsTerminalCollapsed] = useState<boolean>(false);
 
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -49,8 +50,9 @@ export default function DeadNetBrowserHome() {
   };
 
   // Synthesize authentic ghostly voice whisper via ElevenLabs
-  const playElevenLabsWhisper = async (text: string) => {
-    if (!audioEnabled) return;
+  const playElevenLabsWhisper = async (text: string, force = false) => {
+    if (!audioEnabled && !force) return;
+    setIsNarrating(true);
     try {
       const res = await fetch("/api/whisper", {
         method: "POST",
@@ -61,12 +63,28 @@ export default function DeadNetBrowserHome() {
         const blob = await res.blob();
         const audioUrl = URL.createObjectURL(blob);
         const audio = new Audio(audioUrl);
-        audio.volume = 0.85;
-        audio.play().catch(() => {});
+        audio.volume = 0.9;
+        audio.onended = () => setIsNarrating(false);
+        audio.onerror = () => setIsNarrating(false);
+        await audio.play();
+      } else {
+        setIsNarrating(false);
       }
     } catch {
-      // Audio fallback
+      setIsNarrating(false);
     }
+  };
+
+  const handleTriggerNarration = () => {
+    if (isNarrating) return;
+    if (!audioEnabled) setAudioEnabled(true);
+    const siteTitle = bundle?.title || "The Spiral GeoCities Hub";
+    const siteEra = bundle?.era || "1999";
+    const subheadline = bundle?.modernView?.heroSubheadline || bundle?.modernView?.tagline || "";
+    const speechText = subheadline
+      ? `A digital ancestor awakens from ${siteEra}. ${siteTitle}. ${subheadline}`
+      : `A digital ancestor awakens from ${siteEra}. ${siteTitle}.`;
+    playElevenLabsWhisper(speechText, true);
   };
 
   const handleSliderChange = (newVal: number) => {
@@ -210,6 +228,8 @@ export default function DeadNetBrowserHome() {
         onChange={handleSliderChange}
         audioEnabled={audioEnabled}
         onToggleAudio={() => setAudioEnabled(!audioEnabled)}
+        isNarrating={isNarrating}
+        onTriggerNarration={handleTriggerNarration}
       />
 
       {/* 3. Main Split-Screen Workspace */}

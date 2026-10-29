@@ -1,20 +1,24 @@
 "use client";
 
 import React from "react";
-import { Eye, Monitor, Sparkles, Volume2, VolumeX, ShieldCheck } from "lucide-react";
+import { Eye, Monitor, Sparkles, Volume2, VolumeX, ShieldCheck, Radio } from "lucide-react";
 
 interface EctoplasmSliderProps {
   sliderValue: number; // 0, 50, or 100
   onChange: (val: number) => void;
   audioEnabled: boolean;
   onToggleAudio: () => void;
+  isNarrating?: boolean;
+  onTriggerNarration?: () => void;
 }
 
 export function EctoplasmSlider({
   sliderValue,
   onChange,
   audioEnabled,
-  onToggleAudio
+  onToggleAudio,
+  isNarrating = false,
+  onTriggerNarration
 }: EctoplasmSliderProps) {
   const getModeLabel = () => {
     if (sliderValue < 30) {
@@ -98,7 +102,7 @@ export function EctoplasmSlider({
         </div>
 
         {/* Current Mode Description Banner & Ambiance Toggle */}
-        <div className="flex items-center justify-between md:justify-end gap-3 w-full md:w-auto font-mono text-xs">
+        <div className="flex items-center justify-between md:justify-end gap-2.5 w-full md:w-auto font-mono text-xs">
           <div className={`px-2.5 py-1 rounded-md border flex items-center gap-2 ${mode.badgeColor}`}>
             {sliderValue === 0 && <Monitor className="w-3.5 h-3.5 text-amber-400" />}
             {sliderValue === 50 && <Eye className="w-3.5 h-3.5 text-emerald-400" />}
@@ -107,9 +111,25 @@ export function EctoplasmSlider({
             <span className="hidden xl:inline text-[11px] opacity-90">{mode.desc}</span>
           </div>
 
+          {onTriggerNarration && (
+            <button
+              onClick={onTriggerNarration}
+              disabled={isNarrating}
+              title="Trigger Eerie AI Voice Narration (ElevenLabs Turbo v2.5)"
+              className={`px-2.5 py-1 rounded-md border flex items-center gap-1.5 transition-all text-xs font-mono shadow-sm ${
+                isNarrating
+                  ? "bg-purple-950/90 border-purple-500 text-purple-300 animate-pulse shadow-[0_0_12px_rgba(168,85,247,0.4)] cursor-wait"
+                  : "bg-slate-800 hover:bg-purple-950/60 hover:border-purple-500/50 text-slate-300 hover:text-purple-200 border-slate-700 active:scale-95"
+              }`}
+            >
+              <Radio className={`w-3.5 h-3.5 ${isNarrating ? "text-purple-400 animate-spin" : "text-purple-400"}`} />
+              <span className="font-semibold">{isNarrating ? "Whispering..." : "Narrate"}</span>
+            </button>
+          )}
+
           <button
             onClick={onToggleAudio}
-            title="Toggle Retro CRT & Dial-up Ambiance"
+            title={audioEnabled ? "Mute Retro Dial-up Audio" : "Unmute Retro Dial-up Audio"}
             className="p-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700 transition-colors"
           >
             {audioEnabled ? <Volume2 className="w-3.5 h-3.5 text-emerald-400" /> : <VolumeX className="w-3.5 h-3.5" />}
