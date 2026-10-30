@@ -40,6 +40,13 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "DeadNet Ectoplasm Browser — Autonomous Digital Archaeology",
     description: "Autonomous digital archaeology and web resurrection engine for early-web digital heritage."
+  },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" }
+    ],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg"
   }
 };
 
