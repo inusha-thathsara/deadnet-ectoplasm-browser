@@ -3,11 +3,9 @@
 
 [![Next.js 16](https://img.shields.io/badge/Next.js-16.4.3-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React 19](https://img.shields.io/badge/React-19.3-61dafb?style=for-the-badge&logo=react)](https://react.dev/)
-[![Gemma 3 Open-Weight AI](https://img.shields.io/badge/Gemma_3-Open--Weight_AI-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev/gemma)
-[![Stagehand v4](https://img.shields.io/badge/Stagehand_v4-Browserbase-00E599?style=for-the-badge)](https://browserbase.com)
-[![Temporal Workflows](https://img.shields.io/badge/Temporal-Durable_Workflows-000000?style=for-the-badge&logo=temporal)](https://temporal.io)
-[![Sentry Agent Tracing](https://img.shields.io/badge/Sentry-Agent_Tracing-362D59?style=for-the-badge&logo=sentry)](https://sentry.io)
-[![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
+[![Node.js 22](https://img.shields.io/badge/Node.js-22_LTS-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/)
+[![DeadNet CI Pipeline](https://github.com/inusha-thathsara/deadnet-ectoplasm-browser/actions/workflows/ci.yml/badge.svg)](https://github.com/inusha-thathsara/deadnet-ectoplasm-browser/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Finusha-thathsara%2Fdeadnet-ectoplasm-browser&project-name=deadnet-ectoplasm-browser&repo-name=deadnet-ectoplasm-browser&env=OPENROUTER_API_KEY,ELEVENLABS_API_KEY,BROWSERBASE_API_KEY,BROWSERBASE_PROJECT_ID)
 
 ---
@@ -32,18 +30,35 @@ A vast majority of the early web (1995–2008)—including GeoCities fan shrines
 
 ---
 
-## 🎚️ The Signature UX: The "Ectoplasm Slider"
+## 🎚️ Core UX Innovations & Features
 
-At the top of the DeadNet viewport sits an interactive morphing control that scrubs seamlessly across time:
+### 1. The Signature "Ectoplasm Slider"
+At the top of the DeadNet viewport sits an interactive morphing scrubber that bridges nearly three decades of web evolution:
 
 ```
 [ 0% — 1998 CRT MODE ] <========> [ 50% — HAUNTED X-RAY MODE ] <========> [ 100% — 2026 REINCARNATED ]
 ```
 
-- **0% (1998 CRT Mode):** Renders the healed original website in authentic HTML 3.2 inside an isolated iframe, complete with retro CRT scanlines (`crt-overlay`), working webring hops, and client-side JavaScript shims for dead CGI guestbooks and hit counters. Accompanied by Web Audio retro square-wave sound effects.
-- **50% (Haunted X-Ray Mode):** Illuminates the DOM in glowing emerald ectoplasm (`#39ff14`). Every AI-reconstructed node is tagged with `data-ectoplasm="reconstructed"` and exposes hoverable tooltips citing the exact SerpApi/USENET evidence used to reconstruct it.
-- **100% (2026 Reincarnated Mode):** Dynamically morphs the extracted semantic entities (articles, specs, guestbooks, downloads) into a clean, modern, accessible Next.js 16 application with dark mode styling and zero loss of historical content.
-- **🔊 Eerie Voice Whispers (ElevenLabs):** Clicking the audio button plays deep, atmospheric narrations synthesized via ElevenLabs Turbo v2.5 reciting the reconstructed webmaster's lost comments and warnings.
+- **0% (1998 CRT Mode):** Renders the healed original website in authentic HTML 3.2 inside an isolated sandboxed iframe, complete with retro CRT scanline shaders (`crt-overlay`), 800×600 framing, working webring hops, and client-side JavaScript shims for dead CGI guestbooks and hit counters. Accompanied by Web Audio retro square-wave sound effects.
+- **50% (Haunted X-Ray Mode):** Illuminates the DOM in glowing emerald ectoplasm (`#39ff14`). Every AI-reconstructed node is tagged with `data-ectoplasm="reconstructed"` and exposes hoverable tooltips citing the exact archival and USENET evidence used to reconstruct it.
+- **100% (2026 Reincarnated Mode):** Dynamically morphs the extracted semantic entities (articles, specs, guestbooks, downloads) into a clean, modern, accessible Next.js 16 application with dark mode styling, 3D mouse parallax cards, and zero loss of historical content.
+
+### 2. Interactive 3D DOM Topology Holocron
+Embedded directly inside the telemetry console is a full 360° interactive 3D spatial canvas:
+- **3D Spatial DOM Projection:** Projects HTML elements (`<TABLE>`, `<IMG 0x0>`, `<A 404>`, `/cgi-bin/`) into interactive 3D particle nodes.
+- **Mouse Drag & Orbital Physics:** Smooth drag-to-rotate camera control with inertia and 60 FPS performance monitoring.
+- **Time-Travel Mesh Modes:** Switches vertex rendering between `1998 VECTOR`, `ECTOPLASM GLOW`, and `2026 MODERN MESH` in sync with the Ectoplasm Slider.
+- **Expandable HUD:** Toggle between a compact preview and an expanded 80vh diagnostic holocron.
+
+### 3. Concurrency-Safe AI Voice Narration (`📻 Narrate`)
+- **Atmospheric Lore Synthesis:** Generates eerie historical narratives of lost webmasters and vanished sites powered by ElevenLabs Turbo v2.5.
+- **Single-Stream Concurrency Guard:** Automatically terminates in-flight audio tracks and aborts pending fetch streams using `AbortController` when switching presets or toggling speech, eliminating overlapping audio artifacts.
+- **Instant Toggle & Mute Sync:** Clicking while active functions as an immediate stop button; global audio mute pauses all synthesizers instantly.
+
+### 4. Forensic Telemetry & Sonar Radar
+- **Live Sonar Scanner:** An animated sweeping radar beam that dynamically tallies healed images, exhumed hyperlinks, and shimmed CGI scripts.
+- **Streaming Log Terminal:** Real-time Server-Sent Events (SSE) stream exhumation milestones with distinct level glow shaders.
+- **Instant Historical Demos (`?` Hover Tips):** Built-in presets with hoverable guidance so anyone can test complex web resurrecting without needing to search for dead URLs.
 
 ---
 
@@ -153,13 +168,13 @@ Explore 3 instant golden presets or paste any arbitrary live Wayback URL:
 ## 🚀 Getting Started & Local Installation
 
 ### Prerequisites
-- **Node.js**: v20.0.0 or higher
+- **Node.js**: v22.0.0 LTS or higher
 - **npm** or **pnpm**
-- **Ollama** (optional, for local Gemma 3 inference): `ollama run gemma2:9b`
+- **Ollama** (optional, for offline local Gemma 3 inference): `ollama run gemma2:9b`
 
 ### 1. Clone & Install Dependencies
 ```bash
-git clone https://github.com/your-username/deadnet-ectoplasm-browser.git
+git clone https://github.com/inusha-thathsara/deadnet-ectoplasm-browser.git
 cd deadnet-ectoplasm-browser
 npm install
 ```
@@ -223,6 +238,12 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 #### Option A: 1-Click Vercel Deployment (Recommended)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Finusha-thathsara%2Fdeadnet-ectoplasm-browser&project-name=deadnet-ectoplasm-browser&repo-name=deadnet-ectoplasm-browser&env=OPENROUTER_API_KEY,ELEVENLABS_API_KEY,BROWSERBASE_API_KEY,BROWSERBASE_PROJECT_ID)
 
+1. Click the button above to import your repo to Vercel.
+2. Supply your API keys in the environment variable prompt.
+3. Once deployed, attach your custom domain (e.g. `deadnet.inusha.tech`):
+   - Navigate to **Project Settings** → **Domains** → Add `deadnet.inusha.tech`.
+   - Add a `CNAME` record in your DNS provider pointing to `cname.vercel-dns.com`.
+
 Or deploy via the Vercel CLI:
 ```bash
 # 1. Login to Vercel
@@ -254,6 +275,7 @@ deadnet-ectoplasm-browser/
 ├── docker-compose.yml            # Full-stack DeadNet + Ollama composition
 ├── render.yaml                   # 1-Click Render cloud deploy blueprint
 ├── public/                       # Static brand assets & icons
+│   └── icon.svg                  # Vector ectoplasm ghost favicon
 ├── scripts/
 │   ├── verify-env.mjs            # Environment audit & live API verification
 │   └── verify-session.mjs        # Stagehand + Browserbase cloud browser verification
@@ -265,6 +287,7 @@ deadnet-ectoplasm-browser/
 │   │   │   └── whisper/route.ts  # ElevenLabs eerie voice synthesis route
 │   │   ├── error.tsx             # Production error boundary with retry mechanism
 │   │   ├── globals.css           # Tailwind 4, CRT scanlines & ectoplasm glow shaders
+│   │   ├── icon.svg              # Next.js App Router dynamic vector favicon
 │   │   ├── layout.tsx            # Root layout with OpenGraph & Twitter metadata
 │   │   ├── loading.tsx           # Production streaming skeleton UI
 │   │   ├── not-found.tsx         # 404 digital tombstone void page
